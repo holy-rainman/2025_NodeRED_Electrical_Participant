@@ -1,4 +1,4 @@
-#define LEDR  15
+#define LEDR  0
 #define LEDG  2
 
 void setup() 
