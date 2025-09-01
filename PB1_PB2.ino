@@ -1,4 +1,4 @@
-#define LEDR  0
+#define LEDR  15
 #define LEDG  2
 #define RLY1  23
 #define RLY2  22
