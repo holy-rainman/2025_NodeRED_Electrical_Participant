@@ -1,50 +1,92 @@
-#include <PZEM004Tv30.h>
-#define PZEM_RX_PIN 16   // Pin ESP32 RX sambung ke TX modul PZEM
-#define PZEM_TX_PIN 17   // Pin ESP32 TX sambung ke RX modul PZEM
-HardwareSerial PZEMSerial(1);
-PZEM004Tv30 pzem(PZEMSerial, PZEM_RX_PIN, PZEM_TX_PIN);
+/*!
+ *@file       : PZEM-004T_ESP32.ino
+ *@brief      : 100A PZEM-004T with ESP32
+ *@copyright  : Copyright (c) 2022 MYBOTIC
+ *@licence    : The MIT License (MIT)
+ *@author     : Adapted for ESP32 by ChatGPT
+ *@version    : V3.0
+ *@date       : 03-09-2025
+ */
 
-float voltage,current,power,energy,frequency,pf;
+#include <PZEM004Tv30.h>
+
+// Define RX/TX pins for ESP32 (adjust to your wiring)
+#define PZEM_RX 16   // GPIO16
+#define PZEM_TX 17   // GPIO17
+#define RLY1    23
+
+PZEM004Tv30 pzem(Serial2, PZEM_RX, PZEM_TX);
+int cnt=0;
 
 void setup() 
-{ Serial.begin(115200);
+{ pinMode(RLY1,OUTPUT);
+  digitalWrite(RLY1,HIGH);
+  Serial.begin(115200);
 
-  PZEMSerial.begin(9600, SERIAL_8N1, PZEM_RX_PIN, PZEM_TX_PIN);
-  Serial.println("PZEM Monitor Started");
+ // Initialize Serial2 (baud is fixed at 9600 for PZEM-004T)
+  Serial2.begin(9600, SERIAL_8N1, PZEM_RX, PZEM_TX);
+  Serial.println("PZEM-004T ESP32 Test");
 }
 
-void loop() 
-{ readPZEM();
-}
-
-void readPZEM()
-{ Serial.print("Custom Address: ");
-  Serial.println(pzem.readAddress(), HEX);
-
-  // Baca data dari sensor
-  voltage   = pzem.voltage();
-  current   = pzem.current();
-  power     = pzem.power();
-  energy    = pzem.energy();
-  frequency = pzem.frequency();
-  pf        = pzem.pf();
-
-  // Semak jika bacaan valid
-  if (isnan(voltage))       Serial.println("Error reading voltage");
-  else if (isnan(current))  Serial.println("Error reading current");
-  else if (isnan(power))    Serial.println("Error reading power");
-  else if (isnan(energy))   Serial.println("Error reading energy");
-  else if (isnan(frequency))Serial.println("Error reading frequency");
-  else if (isnan(pf))       Serial.println("Error reading power factor");
-  else 
-  { Serial.print("Voltage: ");    Serial.print(voltage);      Serial.println(" V");
-    Serial.print("Current: ");    Serial.print(current);      Serial.println(" A");
-    Serial.print("Power: ");      Serial.print(power);        Serial.println(" W");
-    Serial.print("Energy: ");     Serial.print(energy, 3);    Serial.println(" kWh");
-    Serial.print("Frequency: ");  Serial.print(frequency, 1); Serial.println(" Hz");
-    Serial.print("PF: ");         Serial.println(pf);
+void loop() {
+  float voltage = pzem.voltage();
+  if (!isnan(voltage)) {
+    Serial.print("Voltage: ");
+    Serial.print(voltage);
+    Serial.println(" V");
+  } else {
+    Serial.println("Error reading voltage");
   }
 
-  Serial.println();
+  float current = pzem.current();
+  if (!isnan(current)) {
+    Serial.print("Current: ");
+    Serial.print(current);
+    Serial.println(" A");
+  } else {
+    Serial.println("Error reading current");
+  }
+
+  float power = pzem.power();
+  if (!isnan(power)) {
+    Serial.print("Power: ");
+    Serial.print(power);
+    Serial.println(" W");
+  } else {
+    Serial.println("Error reading power");
+  }
+
+  float energy = pzem.energy();
+  if (!isnan(energy)) {
+    Serial.print("Energy: ");
+    Serial.print(energy, 3);
+    Serial.println(" kWh");
+  } else {
+    Serial.println("Error reading energy");
+  }
+
+  float frequency = pzem.frequency();
+  if (!isnan(frequency)) {
+    Serial.print("Frequency: ");
+    Serial.print(frequency, 1);
+    Serial.println(" Hz");
+  } else {
+    Serial.println("Error reading frequency");
+  }
+
+  float pf = pzem.pf();
+  if (!isnan(pf)) {
+    Serial.print("PF: ");
+    Serial.println(pf);
+  } else {
+    Serial.println("Error reading power factor");
+  }
+
+  Serial.println("-----------------------------");
   delay(2000);
+
+  cnt++;
+  if(cnt<5)         digitalWrite(RLY1,HIGH);
+  else if(cnt<=10)  digitalWrite(RLY1,LOW);
+  else              cnt=0;
 }
