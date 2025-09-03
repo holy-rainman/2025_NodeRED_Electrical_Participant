@@ -39,8 +39,8 @@ void callback(char* topic, byte* payload, unsigned int length)
   Serial.print("]: ");
   Serial.println(msg);
 
-  if (msg == "led1_1") digitalWrite(LEDpin1, HIGH);
-  if (msg == "led1_0") digitalWrite(LEDpin1, LOW);
+  if (msg == "led1_1") digitalWrite(LEDR, HIGH);
+  if (msg == "led1_0") digitalWrite(LEDR, LOW);
 }
 
 void reconnect() 
@@ -67,8 +67,8 @@ void setup()
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 
-  pinMode(LEDpin1, OUTPUT);
-  digitalWrite(LEDpin1, LOW);
+  pinMode(LEDR,OUTPUT);  digitalWrite(LEDR,LOW);
+  pinMode(LEDG,OUTPUT);  digitalWrite(LEDG,LOW);
 }
 
 void loop() 
