@@ -40,8 +40,8 @@ void callback(char* topic, byte* payload, unsigned int length)
   Serial.print("]: ");
   Serial.println(msg);
 
-  if (msg == "led1_1") digitalWrite(LEDR, HIGH);
-  if (msg == "led1_0") digitalWrite(LEDR, LOW);
+  if (msg == "ledr_1") digitalWrite(LEDR, HIGH);
+  if (msg == "ledr_0") digitalWrite(LEDR, LOW);
 }
 
 void reconnect() 
