@@ -16,6 +16,7 @@ void setup()
   
   pinMode(PB1,INPUT_PULLUP);
   pinMode(PB2,INPUT_PULLDOWN);
+  Serial.begin(115200);
 }
 void loop() 
 { int an = analogRead(34);
