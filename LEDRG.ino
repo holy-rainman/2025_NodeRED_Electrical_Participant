@@ -1,5 +1,5 @@
-#define LEDR  15
-#define LEDG  2
+#define LEDR  2
+#define LEDG  15
 
 void setup() 
 { pinMode(LEDR,OUTPUT);
