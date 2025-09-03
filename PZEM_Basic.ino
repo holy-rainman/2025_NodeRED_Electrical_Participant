@@ -16,7 +16,7 @@
 #define RLY1    23
 
 PZEM004Tv30 pzem(Serial2, PZEM_RX, PZEM_TX);
-int cnt=0;
+int cnt=1;
 
 void setup() 
 { pinMode(RLY1,OUTPUT);
@@ -86,7 +86,7 @@ void loop() {
   delay(2000);
 
   cnt++;
-  if(cnt<5)         digitalWrite(RLY1,HIGH);
-  else if(cnt<=10)  digitalWrite(RLY1,LOW);
-  else              cnt=0;
+  if(cnt==5)  digitalWrite(RLY1,HIGH);
+  if(cnt==10) digitalWrite(RLY1,LOW);
+  if(cnt==11) cnt=1;
 }
