@@ -2,7 +2,8 @@
 #include <WiFiClientSecure.h>
 #include <PubSubClient.h>
 
-#define LEDpin1 18
+#define LEDR 2
+#define LEDG 15
 
 // ==== WiFi credentials ====
 const char* ssid        = "YOUR_SSID";
