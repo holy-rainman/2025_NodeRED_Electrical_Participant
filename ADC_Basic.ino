@@ -19,6 +19,6 @@ void setup()
   Serial.begin(115200);
 }
 void loop() 
-{ int an = analogRead(34);
+{ int an = analogRead(LDR);
   Serial.println(an);
 }
