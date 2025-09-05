@@ -82,11 +82,12 @@ void loop() {
     Serial.println("Error reading power factor");
   }
 
-  Serial.println("-----------------------------");
-  delay(2000);
-
   cnt++;
   if(cnt==5)  digitalWrite(RLY1,HIGH);
   if(cnt==10) digitalWrite(RLY1,LOW);
   if(cnt==11) cnt=1;
+
+  Serial.print("----------------------------- ");
+  Serial.println(cnt*2);
+  delay(2000);
 }
