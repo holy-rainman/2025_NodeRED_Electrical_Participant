@@ -6,6 +6,7 @@
 #define LEDG 15
 #define RLY1 23
 #define RLY2 22
+#define BUZ  21
 
 // ==== WiFi credentials ====
 const char* ssid        = "YOUR_SSID";
@@ -18,6 +19,13 @@ const char* mqtt_user   = "YOUR SERVER_USERNAME";
 const char* mqtt_pass   = "YOUR_SERVER_PW";
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
+
+void beep(int bil, int tempoh)
+{ for(int i=0;i<bil;i++)
+  { digitalWrite(BUZ,HIGH); delay(tempoh);
+    digitalWrite(BUZ,LOW);  delay(tempoh);
+  }
+}
 
 void setup_wifi() 
 { Serial.print("Connecting to ");
@@ -51,6 +59,8 @@ void callback(char* topic, byte* payload, unsigned int length)
   if (msg == "rly1_0") digitalWrite(RLY1, HIGH);
   if (msg == "rly2_1") digitalWrite(RLY2, LOW);
   if (msg == "rly2_0") digitalWrite(RLY2, HIGH);
+
+  beep(1,50);
 }
 
 void reconnect() 
@@ -83,6 +93,7 @@ void setup()
 
   pinMode(RLY1,OUTPUT);  digitalWrite(RLY1,HIGH);
   pinMode(RLY2,OUTPUT);  digitalWrite(RLY2,HIGH);
+  pinMode(BUZ,OUTPUT);
 }
 
 void loop() 
