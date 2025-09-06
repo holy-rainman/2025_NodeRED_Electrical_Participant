@@ -164,7 +164,7 @@ void readPZEM()
     dtostrf(voltage,      6, 2, buf); client.publish("aim/voltage",   buf);
     dtostrf(current*1000, 6, 2, buf); client.publish("aim/current",   buf);
     dtostrf(power,        6, 2, buf); client.publish("aim/power",     buf);
-    dtostrf(energy,  6, 2, buf); client.publish("aim/energy",    buf);
+    dtostrf(energy,       6, 2, buf); client.publish("aim/energy",    buf);
     dtostrf(frequency,    6, 2, buf); client.publish("aim/frequency", buf);
     dtostrf(pf,           6, 2, buf); client.publish("aim/pf",        buf);
   }
