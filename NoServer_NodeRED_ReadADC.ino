@@ -127,8 +127,23 @@ void loop()
   if(pb2 == LOW && lastPB2 == HIGH) client.publish("aim/Button2Status","Button 2 idle");
   lastPB2 = pb2;
 
-  if(analogRead(LDR)>=2800)      client.publish("aim/ldrStatus","Dark");
-  else if(analogRead(LDR)>=1800) client.publish("aim/ldrStatus","Room Light");
-  else                           client.publish("aim/ldrStatus","Bright Light");  
-  Serial.println(analogRead(LDR));
+  // --- LDR (check every 2s) ---
+  if (millis() - lastLdrTime > 2000) 
+  { int ldrValue = analogRead(LDR);
+    String ldrStatus;
+
+    if (ldrValue >= 2800)      ldrStatus = "Dark";
+    else if (ldrValue >= 1800) ldrStatus = "Room Light";
+    else                       ldrStatus = "Bright Light";
+
+    if (ldrStatus != lastLdrStatus) 
+    { client.publish("aim/ldrStatus", ldrStatus.c_str());
+      lastLdrStatus = ldrStatus;
+    }
+
+    Serial.print("LDR value: ");
+    Serial.println(ldrValue);
+
+    lastLdrTime = millis();
+  }
 }
