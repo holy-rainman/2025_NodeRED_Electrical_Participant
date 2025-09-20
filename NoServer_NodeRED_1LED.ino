@@ -20,14 +20,12 @@ WiFiClient espClient;        // plain WiFi client
 PubSubClient client(espClient);
 
 void setup_wifi() 
-{
-  Serial.print("Connecting to ");
+{ Serial.print("Connecting to ");
   Serial.println(ssid);
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) 
-  { 
-    delay(500);
+  { delay(500);
     Serial.print(".");
   }
   Serial.println("\nWiFi connected");
@@ -36,8 +34,7 @@ void setup_wifi()
 }
 
 void callback(char* topic, byte* payload, unsigned int length) 
-{ 
-  String msg = "";
+{ String msg = "";
   for (int i = 0; i < length; i++) 
     msg += (char)payload[i];
 
@@ -51,19 +48,15 @@ void callback(char* topic, byte* payload, unsigned int length)
 }
 
 void reconnect() 
-{ 
-  while (!client.connected()) 
-  { 
-    Serial.print("Attempting MQTT connection...");
+{ while (!client.connected()) 
+  { Serial.print("Attempting MQTT connection...");
     // anonymous
     if (client.connect("ESPClient")) 
-    { 
-      Serial.println("connected");
+    { Serial.println("connected");
       client.subscribe("aim/LedControl");
     } 
     else 
-    { 
-      Serial.print("failed, rc=");
+    { Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       delay(5000);
@@ -72,8 +65,7 @@ void reconnect()
 }
 
 void setup() 
-{ 
-  Serial.begin(115200);
+{ Serial.begin(115200);
   setup_wifi();
 
   client.setServer(mqtt_server, mqtt_port);
@@ -84,8 +76,7 @@ void setup()
 }
 
 void loop() 
-{ 
-  if (!client.connected()) 
+{ if (!client.connected()) 
     reconnect();
   client.loop();
 }
