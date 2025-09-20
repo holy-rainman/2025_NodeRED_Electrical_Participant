@@ -109,6 +109,9 @@ void setup()
 static int lastPB1 = HIGH;
 static int lastPB2 = LOW;
 
+String lastLdrStatus = "";
+unsigned long lastLdrTime = 0;
+
 void loop() 
 { if (!client.connected()) 
     reconnect();
