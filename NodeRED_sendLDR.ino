@@ -132,7 +132,7 @@ void loop()
   if(digitalRead(PB2)==0) client.publish("aim/Button2Status","Button 2 idle");
 
   if(analogRead(LDR)>=2800)      client.publish("aim/ldrStatus","Dark");
-  else if(analogRead(LDR)>=1000) client.publish("aim/ldrStatus","Room Light");
+  else if(analogRead(LDR)>=800) client.publish("aim/ldrStatus","Room Light");
   else                           client.publish("aim/ldrStatus","Bright Light");  
   Serial.println(analogRead(LDR));
 
