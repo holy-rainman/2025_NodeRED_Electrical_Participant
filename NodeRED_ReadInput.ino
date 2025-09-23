@@ -106,16 +106,26 @@ void loop()
     reconnect();
   client.loop();
 
-  if(digitalRead(PB1)==0)
-  { client.publish("aim/Button1Status","Button 1 pressed");
-    while(digitalRead(PB1)==0);
+  int currPB1 = digitalRead(PB1);
+  int currPB2 = digitalRead(PB2);
+
+  if(currPB1 == LOW && prevPB1 == HIGH)   // PB1 pressed
+  { client.publish("aim/Button1Status", "Button 1 pressed");
+    delay(200); // debounce
+  }
+  if(currPB1 == HIGH && prevPB1 == LOW)  // PB1 released (idle)
+  { client.publish("aim/Button1Status", "Button 1 idle");
     delay(200);
   }
-  if(digitalRead(PB2)==1)
-  { client.publish("aim/Button2Status","Button 2 pressed");
-    while(digitalRead(PB2)==1);
+  if(currPB2 == HIGH && prevPB2 == LOW)  // PB2 pressed 
+  { client.publish("aim/Button2Status", "Button 2 pressed");
     delay(200);
   }
-  if(digitalRead(PB1)==1) client.publish("aim/Button1Status","Button 1 idle");
-  if(digitalRead(PB2)==0) client.publish("aim/Button2Status","Button 2 idle");
+  if(currPB2 == LOW && prevPB2 == HIGH)  // PB2 released (idle)
+  { client.publish("aim/Button2Status", "Button 2 idle");
+    delay(200);
+  }
+
+  prevPB1 = currPB1;  // simpan keadaan terkini untuk loop seterusnya
+  prevPB2 = currPB2;
 }
