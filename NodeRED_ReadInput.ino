@@ -101,6 +101,9 @@ void setup()
   pinMode(PB2,INPUT_PULLDOWN);
 }
 
+int prevPB1 = HIGH;  // anggap butang idle = HIGH
+int prevPB2 = LOW;   // anggap butang idle = LOW
+
 void loop() 
 { if (!client.connected()) 
     reconnect();
