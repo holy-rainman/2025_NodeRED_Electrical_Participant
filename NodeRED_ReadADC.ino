@@ -102,26 +102,50 @@ void setup()
   pinMode(PB2,INPUT_PULLDOWN);
 }
 
+int prevPB1 = HIGH;  // anggap butang idle = HIGH
+int prevPB2 = LOW;   // anggap butang idle = LOW
+
 void loop() 
 { if (!client.connected()) 
     reconnect();
   client.loop();
 
-  if(digitalRead(PB1)==0)
-  { client.publish("aim/Button1Status","Button 1 pressed");
-    while(digitalRead(PB1)==0);
-    delay(200);
-  }
-  if(digitalRead(PB2)==1)
-  { client.publish("aim/Button2Status","Button 2 pressed");
-    while(digitalRead(PB2)==1);
-    delay(200);
-  }
-  if(digitalRead(PB1)==1) client.publish("aim/Button1Status","Button 1 idle");
-  if(digitalRead(PB2)==0) client.publish("aim/Button2Status","Button 2 idle");
+  int currPB1 = digitalRead(PB1);
+  int currPB2 = digitalRead(PB2);
 
-  if(analogRead(LDR)>=2800)      client.publish("aim/ldrStatus","Dark");
-  else if(analogRead(LDR)>=1800) client.publish("aim/ldrStatus","Room Light");
-  else                           client.publish("aim/ldrStatus","Bright Light");  
-  Serial.println(analogRead(LDR));
+  if(currPB1 == LOW && prevPB1 == HIGH)   // PB1 pressed
+  { client.publish("aim/Button1Status", "Button 1 pressed");
+    delay(200); // debounce
+  }
+  if(currPB1 == HIGH && prevPB1 == LOW)  // PB1 released (idle)
+  { client.publish("aim/Button1Status", "Button 1 idle");
+    delay(200);
+  }
+  if(currPB2 == HIGH && prevPB2 == LOW)  // PB2 pressed 
+  { client.publish("aim/Button2Status", "Button 2 pressed");
+    delay(200);
+  }
+  if(currPB2 == LOW && prevPB2 == HIGH)  // PB2 released (idle)
+  { client.publish("aim/Button2Status", "Button 2 idle");
+    delay(200);
+  }
+
+  prevPB1 = currPB1;  // simpan keadaan terkini untuk loop seterusnya
+  prevPB2 = currPB2;
+
+  // === LDR ===
+  int ldrValue = analogRead(LDR);
+  String currLdrStatus;
+
+  if (ldrValue >= 2800)       currLdrStatus = "Dark";
+  else if (ldrValue >= 1800)  currLdrStatus = "Room Light";
+  else                        currLdrStatus = "Bright Light";
+
+  // hanya publish bila ada perubahan status
+  if (currLdrStatus != prevLdrStatus) {
+    client.publish("aim/ldrStatus", currLdrStatus.c_str());
+    prevLdrStatus = currLdrStatus;
+  }
+
+  Serial.println(ldrValue);
 }
