@@ -110,7 +110,7 @@ void loop()
 { if (!client.connected()) 
     reconnect();
   client.loop();
-
+  
   int currPB1 = digitalRead(PB1);
   int currPB2 = digitalRead(PB2);
 
@@ -143,8 +143,8 @@ void loop()
   else                        currLdrStatus = "Bright Light";
 
   // hanya publish bila ada perubahan status
-  if (currLdrStatus != prevLdrStatus) {
-    client.publish("aim/ldrStatus", currLdrStatus.c_str());
+  if (currLdrStatus != prevLdrStatus) 
+  { client.publish("aim/ldrStatus", currLdrStatus.c_str());
     prevLdrStatus = currLdrStatus;
   }
 
