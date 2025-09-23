@@ -150,7 +150,7 @@ void loop()
   String currLdrStatus;
 
   if (ldrValue >= 2800)       currLdrStatus = "Dark";
-  else if (ldrValue >= 1800)  currLdrStatus = "Room Light";
+  else if (ldrValue >= 800)  currLdrStatus = "Room Light";
   else                        currLdrStatus = "Bright Light";
 
   // hanya publish bila ada perubahan status
