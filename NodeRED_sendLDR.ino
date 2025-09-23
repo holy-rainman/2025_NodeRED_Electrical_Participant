@@ -134,7 +134,7 @@ void loop()
   if(analogRead(LDR)>=2800)      client.publish("aim/ldrStatus","Dark");
   else if(analogRead(LDR)>=800) client.publish("aim/ldrStatus","Room Light");
   else                           client.publish("aim/ldrStatus","Bright Light");  
-  Serial.println(analogRead(LDR));
+  //Serial.println(analogRead(LDR));
 
   readPZEM();
 
